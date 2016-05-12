@@ -19,7 +19,9 @@ Put those details into the code:
 		    password='yourpassword'
 		)
 
-The posting to soundcloud is pretty straightforward after that, its inside a function called 'postToSC'
+The posting to soundcloud is pretty straightforward after that, its inside a function called 'postToSC'.
+You can add more features to your upload (description, etc), check the soundcloud docs: 
+https://developers.soundcloud.com/docs/api/reference#users
 
 Petita works by making some jumbled nonsense (mixing vowels and consontants in different patterns) and then it gets Google to read it out and return an audio file. Thats done by the function 'makeSpeech'. I use the python module gTTS (google text to speech). Its very easy too:
 
