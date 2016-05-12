@@ -2,11 +2,16 @@
 https://soundcloud.com/petita_tatata
 A Soundcloud Bot
 
+by Matthew Plummer-Fernandez 
+http://www.plummerfernandez.com
+
 Petita recites abstract poetry and posts to Soundcloud. 
 
 To make a soundcloud bot you open up an account on soundcloud with a unique email address (and password), and then you request a client ID and Client Secret by registering your app. https://developers.soundcloud.com/docs
 
 Put those details into the code: 
+
+
 		client = soundcloud.Client(
 		    client_id="xxxxxxxxxx", #Client ID
 		    client_secret="xxxxxxxxxxxx", #Client secret
