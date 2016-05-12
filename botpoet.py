@@ -87,7 +87,8 @@ def postToSC(poem_filename, poem_title):
 	track = client.post('/tracks', track={
     	'title': poem_title,
     	'sharing': 'public', #private or public
-    	'asset_data': open(poem_filename, 'rb')
+    	'asset_data': open(poem_filename, 'rb'),
+    	'downloadable': 'true',
 	})
 
 
