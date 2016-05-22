@@ -77,7 +77,7 @@ def postToSC(client,poem_filename, poem_title,poem):
     	'title': poem_title,
     	'sharing': 'public', # public/ private
     	'asset_data': open(poem_filename, 'rb'),
-    	'downloadable': 'true,',
+    	'downloadable': 'true',
     	'license':'cc-by', #Possible values: “no-rights-reserved”, “all-rights-reserved”, “cc-by”, “cc-by-nc”, “cc-by-nd”, “cc-by-sa”
     	'description': poem
 	})
