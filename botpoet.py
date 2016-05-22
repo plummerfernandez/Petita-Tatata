@@ -244,7 +244,7 @@ def makeSlow(input_filename, output_filename): #use sox to slow down file
 
 
 def Main():
-	# You need to put your Thingiverse email and password into the settings.cfg file
+	# You need to put your soundcloud email, password, client_id and client_secret into the settings.cfg file
 	config = ConfigParser.ConfigParser()
 	try:
 		config.read('settings.cfg')
