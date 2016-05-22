@@ -5,6 +5,7 @@
 # sudo pip install gTTS
 # pip install soundcloud
 
+import ConfigParser
 from gtts import gTTS
 import soundcloud
 import random
@@ -67,28 +68,18 @@ import os, time
 'cy' : 'Welsh' #robotic
 """
 
-
-
-
-
-client = soundcloud.Client(
-    client_id="xxxxxxxxxxxxxxxxxxxxxxxx", #Client ID
-    client_secret="xxxxxxxxxxxxxxxxxxxxxxxx", #Client secretion
-    username='youremail@emailprovider.com',
-    password='yourpassword'
-)
-print "client credentials ok"
-
 def makeSpeech(poem,poem_filename, voice):
 	tts = gTTS(text=poem, lang=voice)
 	tts.save(poem_filename)
 
-def postToSC(poem_filename, poem_title):
+def postToSC(client,poem_filename, poem_title,poem):
 	track = client.post('/tracks', track={
     	'title': poem_title,
-    	'sharing': 'public', #private or public
+    	'sharing': 'public', # public/ private
     	'asset_data': open(poem_filename, 'rb'),
-    	'downloadable': 'true',
+    	'downloadable': 'true,',
+    	'license':'cc-by', #Possible values: “no-rights-reserved”, “all-rights-reserved”, “cc-by”, “cc-by-nc”, “cc-by-nd”, “cc-by-sa”
+    	'description': poem
 	})
 
 
@@ -137,11 +128,9 @@ def genPoem():
 	vh8 = hba[2]+s+hba[2]+". "
 	vh9 = hba[3]+s+hba[3]+". "
 	vh10 = hba[3]+s+hba[1]+s+hba[1]+s+hba[0]+". "
-	
 
 	vs = ['a','e','i','o','u']
 	cs = ['b','c','d','f','g','h','j','k','l','m','n','p','r','s','t','v','y','z']
-	
 	#shuffle(vs)
 	#shuffle(cs)
 
@@ -232,25 +221,16 @@ def genPoem():
 	v26 = ts[1]+". "
 
 	verses1 = [v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25,v26, vh1, vh2, vh3, vh4, vh5, vh6, vh7, vh8, vh9, vh10]
-
 	verses = verses1 + verses1 + verses1 + verses1 + verses1 + verses1
-
 	shuffle(verses)
-
 	numverses = random.randrange(6, 24, 2)
 	print "Number of verses = " + str(numverses)
-
 	poem = ""
 	poemname = verses[1]
-
-
 
 	for i in range(1,numverses):
 		poem = poem + verses[i]
 
-
-	#poemname = w1+s+w2
-	#poem = v1 + v2 + v3 + v4
 	print poem
 	return poemname,poem
 
@@ -262,23 +242,47 @@ def makeSlow(input_filename, output_filename): #use sox to slow down file
 	os.system('sox '+temp3[1]+ " " +temp4[1] + " tempo 0.8")
 	os.system("lame --decode " + temp4[1] + " " + output_filename)
 
-# GENERATE POEM
-poemname, newpoem = genPoem()
-# MAKE TEMP MP3 FILENAME
-temp = tempfile.mkstemp(suffix = ".mp3")
-# GET GOOGLE TO SAY IT
-v = voice()
-makeSpeech(newpoem, temp[1], 'ja')
-#SLOW IT
-#temp2 = tempfile.mkstemp(suffix = ".mp3")
-#makeSlow(temp[1],temp2[1])
-#time.sleep(5)
-# POST ON SOUNDCLOUD
-postToSC(temp[1],poemname)
+
+def Main():
+	# You need to put your Thingiverse email and password into the settings.cfg file
+	config = ConfigParser.ConfigParser()
+	try:
+		config.read('settings.cfg')
+		print "[+] Read settings"
+	except:
+		print "[-] Could not read settings"
+
+	sc_id = config.get('soundcloud','client_id')
+	sc_secret = config.get('soundcloud','client_secret')
+	sc_username = config.get('soundcloud','username')
+	sc_password = config.get('soundcloud','password')
+
+	client = soundcloud.Client(
+    client_id=sc_id, 
+    client_secret=sc_secret, 
+    username=sc_username,
+    password=sc_password
+	)
+
+	print "client credentials ok"
+
+	# GENERATE POEM
+	poemname, newpoem = genPoem()
+	# MAKE TEMP MP3 FILENAME
+	temp = tempfile.mkstemp(suffix = ".mp3")
+	# GET GOOGLE TO SAY IT
+	v = voice()
+	makeSpeech(newpoem, temp[1], 'ja')
+	# SLOW IT
+	#temp2 = tempfile.mkstemp(suffix = ".mp3")
+	#makeSlow(temp[1],temp2[1])
+	#time.sleep(5)
+	# POST ON SOUNDCLOUD
+	postToSC(client,temp[1],poemname,newpoem)
+	print("FINISHED")
 
 
+if __name__ == '__main__':
+	Main()
 
-#postToSC("hugoball-es.mp3","Gadji -es")
 
-
-print "finished"
