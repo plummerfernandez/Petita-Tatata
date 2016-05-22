@@ -258,10 +258,10 @@ def Main():
 	sc_password = config.get('soundcloud','password')
 
 	client = soundcloud.Client(
-    client_id=sc_id, 
-    client_secret=sc_secret, 
-    username=sc_username,
-    password=sc_password
+	client_id=sc_id, 
+	client_secret=sc_secret, 
+	username=sc_username,
+	password=sc_password
 	)
 
 	print "client credentials ok"
