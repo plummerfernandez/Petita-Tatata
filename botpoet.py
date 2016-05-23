@@ -242,6 +242,16 @@ def makeSlow(input_filename, output_filename): #use sox to slow down file
 	os.system('sox '+temp3[1]+ " " +temp4[1] + " tempo 0.8")
 	os.system("lame --decode " + temp4[1] + " " + output_filename)
 
+def formatPoem(poemname, poem):
+	poemlines = poem.split('. ')
+	prettypoem = poemname + "<br>" + "<br>"
+	for line in poemlines:
+		prettypoem = prettypoem + line + "<br>"
+		
+	#print prettypoem
+	return prettypoem
+
+
 
 def Main():
 	# You need to put your soundcloud email, password, client_id and client_secret into the settings.cfg file
@@ -278,7 +288,9 @@ def Main():
 	#makeSlow(temp[1],temp2[1])
 	#time.sleep(5)
 	# POST ON SOUNDCLOUD
-	postToSC(client,temp[1],poemname,newpoem)
+	prettypoem = formatPoem(poemname, newpoem)
+
+	postToSC(client,temp[1],poemname,prettypoem)
 	print("FINISHED")
 
 
